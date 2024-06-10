@@ -45,6 +45,7 @@ class ExportController extends Controller
             if ($request->query('action') === 'download') {
 
                 Export::create([
+                    'product_name' =>  $product->name,
                     'product_id' =>  $product->id,
                     'category_id' =>  $category->id,
                     'path' => $product->path,
@@ -80,8 +81,9 @@ class ExportController extends Controller
 
 
     public function index(){
-
+            // lấy danh sách xoá mềm
         $products = Product::onlyTrashed()->get();
+
         $suppliers = Supplier::all();
         $categories = Category::all();
         $warehouses = Warehouse::all();
@@ -95,20 +97,22 @@ class ExportController extends Controller
     public function search(Request $request)
     {
         $query = $request->input('query');
-
         $products = Product::onlyTrashed()->get();
+
         $suppliers = Supplier::all();
         $categories = Category::all();
         $warehouses = Warehouse::all();
 
 
+
+
         if ($query) {
-            $exports = Export::where('name', 'LIKE', "%{$query}%")->paginate(7);
+            $exports = Export::where('product_name', 'LIKE', "%{$query}%")->paginate(7);
         } else {
             $exports = Export::latest()->paginate(7);
         }
 
-        return view('layouts.pages.products.product_list', compact('exports', 'warehouses', 'suppliers', 'categories','products'));
+        return view('layouts.pages.exports.export_list', compact('exports','warehouses', 'suppliers', 'categories' ,'products'));
     }
 }
 

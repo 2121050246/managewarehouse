@@ -29,7 +29,7 @@
 
 
         </div>
-        {{ $exports->links() }}
+
 
         <div class="px-4" style="width:100%">
             <div class="float-end mb-3 ">
@@ -46,7 +46,7 @@
 
         {{-- show --}}
 
-            <div id="account_list" >
+            <div id="export_list" >
                 @include('layouts.pages.exports.export_list' , ['exports' => $exports, 'warehouses' => $warehouses, 'suppliers' => $suppliers, 'categories' => $categories])
             </div>
 
@@ -64,80 +64,7 @@
 
 @section('js')
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const deleteButtons = document.querySelectorAll('.delete-button'); // Sử dụng class thay vì id
 
-        deleteButtons.forEach(button => {
-            button.addEventListener('click', function() {
-                const recordId = this.getAttribute('data-id');
-
-                console.log(recordId);
-
-                Swal.fire({
-                    title: "Bạn muốn xoá không?",
-                    // text: "không thể khôi phục được dữ liệu",
-                    icon: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: '#3085d6',
-                    cancelButtonColor: '#d33',
-                    confirmButtonText: 'Xoá',
-                    cancelButtonText: 'Hủy'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // Gửi yêu cầu xóa đến máy chủ
-                        fetch(`/Duan/accounts/delete/${recordId}`, {
-                            method: 'GET',
-                            headers: {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                                'Content-Type': 'application/json'
-                            }
-                        })
-                        .then(response => {
-                            if (!response.ok) {
-                                throw new Error('Network response was not ok');
-                            }
-                            return response.json();
-                        })
-                        .then(data => {
-                            if (data.success) {
-                                Swal.fire(
-                                    {
-                                        title: 'Xoá thành công',
-
-                                        icon: 'success',
-                                    }
-                                ).then(() => {
-                                    location.reload(); // Tải lại trang để cập nhật danh sách
-                                });
-                            }
-                        })
-
-                        // bắt lỗi
-                        .catch(error => {
-                            Swal.fire(
-                                'Lỗi!',
-                                'Có lỗi xảy ra, vui lòng thử lại.',
-                                'error'
-                            );
-                            console.error('There was a problem with the fetch operation:', error);
-                        });
-
-
-                    } else {
-                        Swal.fire(
-                            {
-                                title: 'Huỷ thành công',
-
-                                icon: 'success',
-                            }
-                        );
-                    }
-                });
-            });
-        });
-    });
-</script>
 
 
 <script>
@@ -152,6 +79,9 @@
                 data: { query: query },
                 success: function(data) {
                     $('#export_list').html(data);
+                },
+                error: function(xhr, status, error) {
+                console.error(xhr.responseText);
                 }
             });
         });

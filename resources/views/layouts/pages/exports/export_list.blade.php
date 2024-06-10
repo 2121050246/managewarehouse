@@ -1,3 +1,4 @@
+{{ $exports->links() }}
 <table class="table text-center">
     <thead >
       <tr>
@@ -17,7 +18,7 @@
 
 
 
-        <th scope="col">Xoá</th>
+        {{-- <th scope="col">Xoá</th> --}}
 
 
       </tr>
@@ -28,7 +29,7 @@
             <tr>
                 <th scope="row">{{($exports->currentPage() - 1) * $exports->perPage() + $loop->index + 1 }}</th>
                 <td>
-                    @if ($products)
+                    @if (isset($products))
                         @foreach ($products as $p)
                             @if ( $p->id == $u->product_id)
                                     {{$p->name}}
@@ -37,7 +38,7 @@
                     @endif
                 </td>
                 <td>
-                    @if ($products)
+                    @if (isset($products))
                     @foreach ($products as $p)
                         @if ( $p->id == $u->product_id)
                             <img style="width:100% ; height:100px ;    object-fit: contain;" src="  {{$u->path}}" alt="">
@@ -48,7 +49,7 @@
                 <td>
 
 
-                    @if ($categories)
+                    @if (isset($categories))
                     @foreach ($categories as $c)
                         @if ( $c->id == $u->category_id)
                                 {{$c->name}}
@@ -58,7 +59,7 @@
                 </td>
                 <td>
 
-                    @if ($warehouses)
+                    @if (isset($warehouses))
                     @foreach ($warehouses as $h)
                         @if ( $h->id == $u->house_id)
                                 {{$h->name}}
@@ -71,11 +72,11 @@
                 <td>{{$u->created_at}}</td>
 
 
-                <td>
+                {{-- <td>
                     <button style="    border: none; background: transparent;" class="delete-button" data-id="{{$u->id}}">
                         <i class="fa-solid fa-trash  text-danger px-3 py-1"></i>
                     </button>
-                </td>
+                </td> --}}
             </tr>
             @endforeach
         @endif
